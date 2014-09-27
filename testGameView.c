@@ -17,29 +17,37 @@ int main()
 	assert(getCurrentPlayer(gv) == PLAYER_LORD_GODALMING);
 	assert(getRound(gv) == 0);
 	assert(getHealth(gv,PLAYER_DR_SEWARD) == GAME_START_HUNTER_LIFE_POINTS);
+	//printf("Lord G's health is %d\n", getHealth(gv,PLAYER_LORD_GODALMING));	
+	//printf("Dracula's health is %d\n", getHealth(gv,PLAYER_DRACULA));
 	assert(getHealth(gv,PLAYER_DRACULA) == GAME_START_BLOOD_POINTS);
 	assert(getScore(gv) == GAME_START_SCORE);
 	assert(getLocation(gv,PLAYER_LORD_GODALMING) == UNKNOWN_LOCATION);
-	printf("passed\n");
+	printf("passed_01\n");
+
 	disposeGameView(gv);
 
 	printf("Test for Dracula trail and basic functions\n");
 	PlayerMessage messages2[] = {"Hello","Rubbish","Stuff","","Mwahahah"};
+		printf("Check_101\n");
 	gv = newGameView("GST.... SAO.... HZU.... MBB.... DC?....", messages2);
+	printf("current turn is %d\n", getCurrentPlayer(gv));
 	assert(getCurrentPlayer(gv) == PLAYER_LORD_GODALMING);
+	printf("current round is %d\n", getRound(gv));
 	assert(getRound(gv) == 1);
 	assert(getLocation(gv,PLAYER_LORD_GODALMING) == STRASBOURG);
 	assert(getLocation(gv,PLAYER_DR_SEWARD) == ATLANTIC_OCEAN);
 	assert(getLocation(gv,PLAYER_VAN_HELSING) == ZURICH);
 	assert(getLocation(gv,PLAYER_MINA_HARKER) == BAY_OF_BISCAY);
+		printf("drac loc is %d\n", getLocation(gv,PLAYER_DRACULA));
 	assert(getLocation(gv,PLAYER_DRACULA) == CITY_UNKNOWN);
 	assert(getHealth(gv,PLAYER_DRACULA) == GAME_START_BLOOD_POINTS);
-	printf("passed\n");
+	printf("passed_02\n");
 	disposeGameView(gv);
 
 	printf("Test for encountering Dracula and hunter history\n");
 	PlayerMessage messages3[] = {"Hello","Rubbish","Stuff","","Mwahahah","Aha!"};
 	gv = newGameView("GST.... SAO.... HCD.... MAO.... DGE.... GGED...", messages3);
+	printf("drac loc is %d\n", getLocation(gv,PLAYER_DRACULA));
 	assert(getLocation(gv,PLAYER_DRACULA) == GENEVA);
 	assert(getHealth(gv,PLAYER_LORD_GODALMING) == 5);
 	assert(getHealth(gv,PLAYER_DRACULA) == 30);
@@ -62,10 +70,12 @@ int main()
 	PlayerMessage messages4[] = {"Hello","Rubbish","Stuff","","Mwahahah","Aha!","","","","Back I go"};
 	gv = newGameView("GGE.... SGE.... HGE.... MGE.... DS?.... "
 	                 "GST.... SST.... HST.... MST.... DD1....", messages4);
+	printf("drac loc is %d\n", getLocation(gv,PLAYER_DRACULA));	
 	assert(getLocation(gv,PLAYER_DRACULA) == DOUBLE_BACK_1);
 	getHistory(gv,PLAYER_DRACULA,history);
 	assert(history[0] == DOUBLE_BACK_1);
 	assert(history[1] == SEA_UNKNOWN);
+	printf("Dracula is on %d health\n",getHealth(gv,PLAYER_DRACULA));
 	assert(getHealth(gv,PLAYER_DRACULA) == GAME_START_BLOOD_POINTS - 4);
 	assert(getCurrentPlayer(gv) == 0);
 	printf("passed\n");

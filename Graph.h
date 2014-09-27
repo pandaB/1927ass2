@@ -6,6 +6,19 @@
 
 #include <stdio.h>
 
+/*
+0 == --- == no access
+1 == --x == ROAD
+2 == -w- == RAIL
+3 == -wx == RAIL / ROAD
+4 == r-- == BOAT
+5 == r-x == BOAT / ROAD
+6 == rw- == BOAT / RAIL
+7 == rwx == BOAT / RAIL / ROAD
+*/
+
+#define BOAT_C 4
+
 // graph representation is hidden
 typedef struct GraphRep *Graph;
 
@@ -14,7 +27,6 @@ typedef int Vertex;
 int   validV(Graph,Vertex); //validity check
 
 // edges are pairs of vertices (end-points)
-typedef struct { Vertex v; Vertex w; } Edge;
 void insertEdge(Graph, Vertex, Vertex, int);
 void removeEdge(Graph, Vertex, Vertex);
 
@@ -25,4 +37,6 @@ Graph makeGraph(int, int**);
 void showGraph(Graph, char **);
 int  findPath(Graph, Vertex, Vertex, int, int *);
 
+
+void addConnections(Graph g);
 #endif
