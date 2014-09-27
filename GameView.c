@@ -5,23 +5,23 @@
 #include "Globals.h"
 #include "Game.h"
 #include "GameView.h"
-#include "Map.h"
+#include "Graph.h"
+#include "Queue.h"
 
 #define PLAYERS 4
+#define HEALTH 0
+
+//====static functions====
+static void makeActionHunter(Gameview g, PlayerID p, char a);
+static void makeActionDracula(Gameview g, PlayerID p, char a, int index);
 
 struct gameView {
 
-	MapRep *map;
-
+	Graph *map;
 	int turnNum;
-	/*
-	[player ID][stat id]
-	stat ids:
-	0 - location
-	1 - health
-	*/
-	int playerStats[PLAYERS][2];
-
+	int health[PLAYERS];
+	Queue trails[5];
+	int score;
 };
 	 
 
@@ -30,21 +30,138 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
 	GameView g = malloc(sizeof(struct gameView));
 	
-	g->turnNumber = 0;
-	int c = 0;
-	for (c;c<PLAYERS;c++) {
-		
+	Graph map = newGraph(NUM_MAP_LOCATIONS);
+	
+	//make score
+	g->score = GAME_START_SCORE;
+	
+	//initialises player and dracular health
+	g->playerStats[0][HEALTH] = GAME_START_HUNTER_LIFE_POINTS;
+	g->playerStats[1][HEALTH] = GAME_START_HUNTER_LIFE_POINTS;
+	g->playerStats[2][HEALTH] = GAME_START_HUNTER_LIFE_POINTS;
+	g->playerStats[3][HEALTH] = GAME_START_HUNTER_LIFE_POINTS;
+	g->playerStats[4][HEALTH] = GAME_START_BLOOD_POINTS;
+	
+	int t_index;
+	for (t_index = 0; t_index < 5, t_index++) {
+		g->trails[t_index] = newQueue();
 	}
 	
+	//go forward through past plays and make actions
+	int curr = 0;
+	while (pastPlays[curr] != NULL) {
+		//determine which player
+		PlayerID p;
+		switch (i) {
+			case 'G':
+				p = PLAYER_LORD_GODALMING;
+				break;
+			case 'S':
+				p = PLAYER_DR_SEWARD;	
+				break;
+			case 'H':
+				p = PLAYER_VAN_HELSING;
+				break;
+			case 'M':
+				p = PLAYER_MINA_HARKER;
+				break;
+			case 'D':
+				p = PLAYER_DRACULA;
+				break;
+			default:
+				exit 0;
+		}
+		
+		//get location id from string from lab
+		//using Places.c
+		Location loc = abbrevToID(strcat(pastPlays[curr+1], pastPlays[curr+2]);
+		
+		//make trail
+		QueueJoin(g->trails[p],loc);
+		if (QueueLen(g->trails[p]) > 6) {
+			QueueLeave(g->trails[p]);
+		}
+		
+		//make actions
+		if (p == PLAYER_DRACULA) {
+			for (int index = 3; index<7; index++) {
+				makeActionDracula(g, p, pastPlays[curr+i], index)	//makes the action on the dracular	
+			}
+		} else {
+			for (int index = 3; index<7; index++) {
+				makeActionHunter(g, p, pastPlays[curr+i])				//makes the action on the player	
+			}
+		}
+		
+		if (p=='D') {
+			g->score--;
+		}
+		
+		curr += 8;
+	}
+	
+	
+		
 	return g;
 }
-	 
-	 
+
+static void makeActionHunter(Gameview g, PlayerID p, char a) {
+
+	int lifeLoss = 0;
+
+	switch (a) {
+		case '.':
+			break;
+		case 'T':
+			lifeLoss = LIFE_LOSS_TRAP_ENCOUNTER;
+			break;
+		case 'V':
+
+			break;
+		case 'D':
+			lifeLoss = LIFE_LOSS_DRACULA_ENCOUNTER;
+			g->playerStats[PLAYER_DRACULA][HEALTH] -= LIFE_LOSS_HUNTER_ENCOUNTER;
+	}
+
+	g->playerStats[p][HEALTH] -= lifeLoss;
+	
+	if (g->playerStats[p][HEALTH] <= 0) {
+		g->playerStats[p][HEALTH] = GAME_START_HUNTER_LIFE_POINTS;
+		g->score -= 6;
+	}
+}
+	
+	
+static void makeActionDracula(Gameview g, PlayerID p, char a, int index) {
+
+	switch (a) {
+		case '.':		//nothing happens
+			break;
+		case 'T':		//trap is made by game
+			break;
+		case 'M':		//trap is destroyed by game
+			break;
+		case 'V':		//immature vampire matures
+			if (i == 5){
+				g->score -= 13;
+			}
+			break;
+	}
+}
+	
+
 // Frees all memory previously allocated for the GameView toBeDeleted
 void disposeGameView(GameView toBeDeleted)
 {
-	//COMPLETE THIS IMPLEMENTATION
-	free( toBeDeleted );
+
+	void dropGraph(g->map);
+
+	int t_index;
+	for (t_index = 0; t_index < 5, t_index++) {
+		dropQueue(g->trails[t_index]);
+	}
+
+	free(toBeDeleted);
 }
 
 
@@ -88,10 +205,21 @@ LocationID getLocation(GameView currentView, PlayerID player)
 //// Functions that return information about the history of the game
 
 // Fills the trail array with the location ids of the last 6 turns
+//first location is most recent
 void getHistory(GameView currentView, PlayerID player,
 	                        LocationID trail[TRAIL_SIZE])
 {
-	//REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+	//takes queue from struct and implements it
+	int location, reverse, buffer;
+	for (location = 0; location < 6; ;location++){
+		trail[location] = QueueLeave(g->trails[player]);
+	}
+	//reverses list to ensure the first element is the one visited most recently
+	for (reverse = 0; reverse < 3; reverse++){
+		buffer = trail[reverse];
+		trail[reverse] = trail[6-reverse];
+		trail[6-reverse] = buffer;
+	}
 }
 
 //// Functions that query the map to find information about connectivity
