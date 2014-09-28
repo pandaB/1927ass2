@@ -312,6 +312,8 @@ Queue railLocs(Graph map, Queue search, int recurse)
 		LocationID prev[NUM_MAP_LOCATIONS];
 		while (QueueIsEmpty(search) {
 			prev[j] = QueueLeave(search);
+			j++;
+		}
 			for (i=0;i<map->nV;i++) {
 				int val = currentView->map->edges[prev[j]][i];
 				if (inArray(

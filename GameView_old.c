@@ -87,6 +87,58 @@ static void makeActionDracula(GameView g, PlayerID p, char a, int index) {
 	}
 }
 
+void dracMove (char *abbrev, char *out)
+{
+	printf("evaluating dracs move: %s\n",abbrev);
+	if (!strcmp("C?",abbrev)) {
+		char num = CITY_UNKNOWN + '0';
+		strcpy(out,&num);
+	} else if (!strcmp("S?",abbrev)) {
+		char num = SEA_UNKNOWN + '0';
+		strcpy(out,SEA_UNKNOWN);
+		g->health[PLAYER_DRACULA] -= 2;				
+	}
+	else if (!strcmp("HI",abbrev)) strcpy(out,HIDE);
+	else if (abbrev[0] == 'D') {
+		int backID =  abbrev[1] - '0';
+		printf("doubling back to %c %d\n", abbrev[1],backID);
+		strcpy(out,102+backID);
+		printf("made it to here\n");
+		if(!strcmp("S?",g->trails[PLAYER_DRACULA][backID]) g->health[PLAYER_DRACULA] -= 2;
+	}
+		
+	else {
+		LocationID loc = abbrevToID(abbrev);
+		strcpy(out,loc);
+		if(idToType(loc) == SEA) g->health[PLAYER_DRACULA] -= 2;
+	}
+}
+
+/*
+void dracMove (char *abbrev, char *out)
+{
+	printf("evaluating dracs move: %s\n",abbrev);
+	if (!strcmp("C?",abbrev)) addTrail(g,p,CITY_UNKNOWN);
+	else if (!strcmp("S?",abbrev)) {
+		addTrail(g,p,SEA_UNKNOWN);
+		g->health[PLAYER_DRACULA] -= 2;				
+	}
+	else if (!strcmp("HI",abbrev)) addTrail(g,p,HIDE);
+	else if (abbrev[0] == 'D') {
+		int backID =  abbrev[1] - '0';
+		printf("doubling back to %c %d\n", abbrev[1],backID);
+		addTrail(g,p,102+backID);
+		printf("made it to here\n");
+		if(!strcmp("S?",g->trails[PLAYER_DRACULA][backID]) g->health[PLAYER_DRACULA] -= 2;
+	}
+		
+	else {
+		LocationID loc = abbrevToID(abbrev);
+		addTrail(g, p, loc);
+		if(idToType(loc) == SEA) g->health[PLAYER_DRACULA] -= 2;
+	}
+}
+*/
 
 //===============================
 //			Interface Functions
@@ -150,33 +202,15 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
 		
 		//get location id from string from lab
 		//using Places.c
-		char abbrev[2];
+		char abbrev[3];
 		abbrev[0] = pastPlays[curr+1];
 		abbrev[1] = pastPlays[curr+2];
 		abbrev[2] = '\0';
 		if (p == PLAYER_DRACULA) {
-			printf("evaluating dracs move: %s\n",abbrev);
-			if (!strcmp("C?",abbrev)) addTrail(g,p,CITY_UNKNOWN);
-			else if (!strcmp("S?",abbrev)) {
-				addTrail(g,p,SEA_UNKNOWN);
-				g->health[PLAYER_DRACULA] -= 2;				
-			}
-			else if (!strcmp("HI",abbrev)) addTrail(g,p,HIDE);
-			else if (abbrev[0] == 'D') {
-				int backID =  abbrev[1] - '0';
-				printf("doubling back to %c %d\n", abbrev[1],backID);
-				addTrail(g,p,102+backID);
-				printf("made it to here\n");
-				if(SEA_UNKNOWN == g->trails[PLAYER_DRACULA][backID]) g->health[PLAYER_DRACULA] -= 2;
-				else if (SEA == idToType(g->trails[PLAYER_DRACULA][backID])) g->health[PLAYER_DRACULA] -= 2;
-			}
-				
-			else {
-				LocationID loc = abbrevToID(abbrev);
-				addTrail(g, p, loc);
-				if(idToType(loc) == SEA) g->health[PLAYER_DRACULA] -= 2;
-			}
-		 } else {
+			char *out;
+			LocationID loc = dracMove(abbrev,out);
+			addTrail(g, p, loc);
+		} else {
 			LocationID loc = abbrevToID(abbrev);
 			addTrail(g, p, loc);
 		}
@@ -269,83 +303,10 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
 	                           LocationID from, PlayerID player, Round round,
 	                           int road, int rail, int sea)
 {
-	LocationID to;
-	Queue locQ = newQueue();
-	for (to=0;to<currentView->map->nV;to++) {
-		int val = currentView->map->edges[from][to];
-		if (val >= 4 ) {
-			val -= 4;
-			if (sea) QueueJoin(locQ,to);
-		} else if (val >= 2) {
-			val -= 2;
-			if (rail) {
-				Queue search = newQueue();
-				QueueJoin(search,from);
-				int recurse = (round + player) % 4;
-				QueueCat(locQ,railLocs(currentView->map, search, recurse));
-			}
-		} else if (val >= 1) {
-			if (road) QueueJoin(locQ,to);
-		}
-	}
-	
-	numLocations[0] = from;	
-	makeList(numLocations, q);
-	
+	//REPLACE THIS WITH YOUR OWN IMPLEMENTATION
 	return NULL;
-}
-
-void makeList(int *locs, Queue q)
-{
-	int i = 1;
-	while(!QueueIsEmpty(q)) {
-		locs[0] = QueueLeave(q);
-		i++;
-	}
-} 
-
-Queue railLocs(Graph map, Queue search, int recurse)
-{
-	if (recurse) {
-		Queue found = newQueue();
-		int j = 0;
-		LocationID prev[NUM_MAP_LOCATIONS];
-		while (QueueIsEmpty(search) {
-			prev[j] = QueueLeave(search);
-			for (i=0;i<map->nV;i++) {
-				int val = currentView->map->edges[prev[j]][i];
-				if (inArray(
-				if (val == 2 || val == 3 || val == 7) {
-					QueueJoin(found, i);
-				}
-			}
-			j++;
-		}
-
-		recurse--;
-		railLocs(map, found, recurse);
-	}
-	return found;
-}
-
-int inArray (LocationID *arr, LocationID loc)
-{
-	int i;
-	for (i=0;i<NUM_MAP_LOCATIONS;i++) {
-		if(arr[i] == loc) return TRUE;
-	}	
-	return FALSE;
 }
 
 //void main () {
 //	printf("This is now working\n");
 //}
-
-
-
-
-
-
-
-
-
