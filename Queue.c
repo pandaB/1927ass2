@@ -102,11 +102,23 @@ int QueueLen(Queue Q)
 	if (Q->head == NULL) {
 		return 0;
 	} else {
-		while (Q->head != Q->tail) {
+		QueueNode *curr = Q->head;
+		while (curr->next != NULL) {
 			len++;
+			curr = curr->next;
 		}
 	}
 	
 	return len;
 }
+
+void QueueCat(Queue a, Queue b)
+{
+	a->tail->next = b->head;
+	free(b);
+}
+
+
+
+
 

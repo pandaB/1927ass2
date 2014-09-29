@@ -100,7 +100,8 @@ int main()
 	printf("Checking Galatz road connections\n");
 	edges = connectedLocations(gv,&size,GALATZ,PLAYER_LORD_GODALMING,0,1,0,0);
 	memset(seen, 0, NUM_MAP_LOCATIONS*sizeof(int));
-	for (i = 0; i< size ; i++) seen[edges[i]] = 1;
+	printf("size is %d\n",size);
+	for (i = 0; i< size ; i++) seen[edges[i]] = TRUE;
 	assert(size == 5); assert(seen[GALATZ]); assert(seen[CONSTANTA]);
 	assert(seen[BUCHAREST]); assert(seen[KLAUSENBURG]); assert(seen[CASTLE_DRACULA]);
 	free(edges);
@@ -113,11 +114,26 @@ int main()
 	assert(seen[ATHENS]); assert(seen[VALONA]); assert(seen[SALONICA]);
 	free(edges);
 	printf("Checking Athens rail connections (none)\n");
-	edges = connectedLocations(gv,&size,ATHENS,PLAYER_LORD_GODALMING,0,0,1,0);
+	edges = connectedLocations(gv,&size,BUDAPEST,PLAYER_LORD_GODALMING,0,0,1,0);
 	assert(size == 1);
-	assert(edges[0] == ATHENS);
+	assert(edges[0] == BUDAPEST);
 	free(edges);
+	printf("Dr Seward\n");
+	edges = connectedLocations(gv,&size,BUDAPEST,PLAYER_DR_SEWARD,0,0,1,0);
+	assert(size == 3);
+	//assert(edges[0] == BUDAPEST);
+	
+	free(edges);
+	printf("Van Helsings\n");
+	edges = connectedLocations(gv,&size,BUDAPEST,PLAYER_VAN_HELSING,0,0,1,0);
+	assert(size == 5);
 	printf("passed\n");
+	printf("Mina\n");
+	edges = connectedLocations(gv,&size,BUDAPEST,PLAYER_MINA_HARKER,0,0,1,0);
+	assert(size == 5);
+	printf("passed\n");	
+	
+	printf("Bernice is awesome\n");
 	disposeGameView(gv);
 	return 0;
 }

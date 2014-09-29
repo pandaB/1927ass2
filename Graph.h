@@ -20,6 +20,15 @@
 #define BOAT_C 4
 
 // graph representation is hidden
+
+
+// graph representation (adjacency matrix)
+typedef struct GraphRep {
+	int    nV;    // #vertices
+	int    nE;    // #edges
+	int  **edges; // matrix of weights (0 == no edge)
+} GraphRep;
+
 typedef struct GraphRep *Graph;
 
 // vertices denoted by integers 0..N-1
@@ -37,6 +46,7 @@ Graph makeGraph(int, int**);
 void showGraph(Graph, char **);
 int  findPath(Graph, Vertex, Vertex, int, int *);
 
+void showGraph2(Graph g);
 
 void addConnections(Graph g);
 #endif

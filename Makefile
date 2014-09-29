@@ -13,7 +13,7 @@ testHunterView.o 	: testHunterView.c Map.c Places.h
 testDracView 		: testDracView.o DracView.o Graph.o Places.o Queue.o
 testDracView.o 	: testDracView.c Map.c Places.h
 
-Queue.o 				: Queue.c Queue.h
+Queue.o 				: Queue.c Queue.h Item.h
 Graph.o 				: Graph.c Graph.h
 Places.o 			: Places.c Places.h
 Map.o 				: Map.c Map.h Places.h

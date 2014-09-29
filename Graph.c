@@ -8,12 +8,7 @@
 #include "Graph.h"
 #include "Queue.h"
 
-// graph representation (adjacency matrix)
-typedef struct GraphRep {
-	int    nV;    // #vertices
-	int    nE;    // #edges
-	int  **edges; // matrix of weights (0 == no edge)
-} GraphRep;
+
 
 // check validity of Vertex
 int validV(Graph g, Vertex v)
@@ -25,11 +20,9 @@ int validV(Graph g, Vertex v)
 void insertEdge(Graph g, LocationID v, LocationID w, int wt)
 {
 	assert(g != NULL && validV(g,v) && validV(g,w));
-	if (g->edges[v][w] == 0) {
-		g->edges[v][w] += wt;
-		g->edges[w][v] += wt;
-		g->nE++;
-	}
+	g->edges[v][w] += wt;
+	g->edges[w][v] += wt;
+	g->nE++;
 }
 
 // remove an Edge
@@ -95,6 +88,20 @@ void showGraph(Graph g, char **names)
 			if (g->edges[v][w]) {
 				printf("\t%s (%d)\n",names[w],g->edges[v][w]);
 			}
+		}
+		printf("\n");
+	}
+}
+
+// display graph, using names for vertices
+void showGraph2(Graph g)
+{
+	assert(g != NULL);
+	printf("#vertices=%d, #edges=%d\n\n",g->nV,g->nE);
+	int v, w;
+	for (v=0; v < g->nV; v++) {
+		for (w=0;w<g->nV;w++) {
+			printf("%d ",g->edges[v][w]);
 		}
 		printf("\n");
 	}

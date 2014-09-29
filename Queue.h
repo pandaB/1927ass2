@@ -15,4 +15,5 @@ void QueueJoin(Queue,Item); // add item on queue
 Item QueueLeave(Queue); // remove item from queue
 int QueueIsEmpty(Queue); // check for no items
 int QueueLen(Queue Q);
+void QueueCat(Queue a, Queue b);
 #endif
