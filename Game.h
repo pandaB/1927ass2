@@ -20,8 +20,8 @@ typedef char PlayerMessage[MESSAGE_SIZE];
 //
 // the array message will be stored in the game history
 // it must contain a null (ie '\0') with only letters, spaces, 
-//	digits, and/or punctuation characters before it, as the array 
-//	will be passed to printf("%s") when displaying messages to users.
+//   digits, and/or punctuation characters before it, as the array 
+//   will be passed to printf("%s") when displaying messages to users.
 
 void registerBestPlay( char *play, PlayerMessage message );
 

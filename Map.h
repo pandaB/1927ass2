@@ -6,9 +6,9 @@
 #include "Places.h"
 
 typedef struct edge{
-	LocationID  start;
-	LocationID  end;
-	TransportID type;
+    LocationID  start;
+    LocationID  end;
+    TransportID type;
 } Edge;
 
 // graph representation is hidden 
