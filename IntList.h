@@ -19,6 +19,8 @@ void freeIntList(IntList);
 
 void showList(IntList L);
 
+int getFirstPlayer(IntList L);
+
 int playerPos(IntList L, int player);
 
 // apppend one integer to the end of a list

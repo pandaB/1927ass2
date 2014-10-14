@@ -64,6 +64,11 @@ void showList(IntList L)
 	printf("x\n");
 }
 
+int getFirstPlayer(IntList L)
+{
+	return L->first->player;
+}
+
 int playerPos(IntList L, int player)
 {
 	struct IntListNode *curr;

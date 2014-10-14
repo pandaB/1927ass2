@@ -13,7 +13,7 @@ void decideDraculaMove(DracView gameState)
 
 	possibleLocations = whereCanIgo(gameState, &numLocations, TRUE, FALSE);
 
-	
+	registerBestPlay("", )
 
 
 	registerBestPlay("CD","Mwuhahahaha");
