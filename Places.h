@@ -100,7 +100,7 @@ typedef int LocationID;
 #define ZURICH                  70
 
 #define MIN_MAP_LOCATION         0
-#define MAX_MAP_LOCATION        70
+#define 	MAX_MAP_LOCATION        70
 #define NUM_MAP_LOCATIONS       71
 
 // Other "locations"
@@ -128,6 +128,8 @@ int nameToID(char *name);
 
 // given a Place abbreviation, return its ID number
 int abbrevToID(char *abbrev);
+
+char *idToAbbrev(int place);
 
 #define isLand(place)  (typeOf(place) == LAND)
 #define isSea(place)  (typeOf(place) == SEA)

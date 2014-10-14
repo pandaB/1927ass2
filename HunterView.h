@@ -114,4 +114,8 @@ LocationID *whereCanTheyGo(HunterView currentView, int *numLocations,
                            PlayerID player, int road, int rail, int sea);
 
 
+void getMessages(HunterView h, PlayerMessage *messages);
+
+int giveMeTurnNum(HunterView h);
+
 #endif

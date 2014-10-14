@@ -8,7 +8,7 @@ BINS = dracula hunter testGameView testHunterView testDracView
 # add any other *.o files that your system requires
 # (and add their dependencies below after DracView.o)
 # if you're not using Map.o or Places.o, you can remove them
-OBJS = GameView.o Map.o Places.o Graph.o Queue.o
+OBJS = GameView.o Map.o Places.o Graph.o Queue.o IntList.o
 # add whatever system libraries you need here (e.g. -lm)
 LIBS =
 
@@ -32,6 +32,7 @@ dracPlayer.o : player.c Game.h DracView.h dracula.h
 hunterPlayer.o : player.c Game.h HunterView.h hunter.h
 	$(CC) $(CFLAGS) -c player.c -o hunterPlayer.o
 
+IntList.o : IntList.c IntList.h
 dracula.o : dracula.c Game.h DracView.h
 hunter.o : hunter.c Game.h HunterView.h
 Places.o : Places.c Places.h

@@ -127,4 +127,6 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
                                LocationID from, PlayerID player, Round round,
                                int road, int rail, int sea);
 
+int giveMeTurnNumber(GameView g);
+
 #endif

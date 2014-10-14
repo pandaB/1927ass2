@@ -431,7 +431,10 @@ void main () {
 
 */
 
-
+int giveMeTurnNumber(GameView g)
+{
+	return g->turnNum;
+}
 
 
 

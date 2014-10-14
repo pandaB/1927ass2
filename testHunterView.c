@@ -26,6 +26,14 @@ int main()
     printf("Test for Dracula trail and basic functions\n");
     PlayerMessage messages2[] = {"Hello","Rubbish","Stuff","","Mwahahah"};
     hv = newHunterView("GST.... SAO.... HZU.... MBB.... DC?....", messages2);
+    int turn = giveMeTurnNum(hv);
+	PlayerMessage messages[turn];
+	getMessages(hv,messages);
+	printf("beginning messages\n");
+	int j;
+	for (j=0;j<turn;j++) {
+		printf("%s\n",messages[j]);
+	}
     assert(whoAmI(hv) == PLAYER_LORD_GODALMING);
     assert(giveMeTheRound(hv) == 1);
     assert(whereIs(hv,PLAYER_LORD_GODALMING) == STRASBOURG);
