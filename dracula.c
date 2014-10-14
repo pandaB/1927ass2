@@ -20,6 +20,7 @@ void decideDraculaMove(DracView gameState)
 	char* moveTo = idToAbbrev(move);
 
 
+	// Best Play
 	registerBestPlay(moveTo, "SHIGGLES");
 	
 
