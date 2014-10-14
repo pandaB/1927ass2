@@ -8,10 +8,20 @@
 
 void decideDraculaMove(DracView gameState)
 {
-	// TODO ...
-	// Replace the line below by something better
+	int numLocations;
+	LocationID* possibleLocations;
+
+	possibleLocations = whereCanIgo(gameState, &numLocations, TRUE, FALSE);
+
+	
+
+
 	registerBestPlay("CD","Mwuhahahaha");
 	
+
+
+
+
 	
 	/*
 	
