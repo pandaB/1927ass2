@@ -3,20 +3,24 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 #include "Game.h"
 #include "DracView.h"
 
+
+int dracRandomMove(DracView gameState);
+
 void decideDraculaMove(DracView gameState)
 {
-	int numLocations;
-	LocationID* possibleLocations;
+	// Seeding srand
+	srand(time(NULL));
+	// Getting random move
+	int move = dracRandomMove(gameState);
+	// Converting location ID to location string
+	char* moveTo = idToAbbrev(move);
 
-	possibleLocations = whereCanIgo(gameState, &numLocations, TRUE, FALSE);
 
-	registerBestPlay("", )
-
-
-	registerBestPlay("CD","Mwuhahahaha");
+	registerBestPlay(moveTo, "SHIGGLES");
 	
 
 
@@ -46,3 +50,14 @@ void decideDraculaMove(DracView gameState)
 	
 	*/
 }
+
+int dracRandomMove(DracView gameState)
+{
+	int* numLocations = NULL;
+	int* possibleLocs = whereCanIgo(gameState, numLocations, TRUE, FALSE);
+
+	int randIndex = (rand()%(*numLocations-1));
+	return possibleLocs[randIndex];
+}
+
+
