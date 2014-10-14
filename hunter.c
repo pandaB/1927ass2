@@ -9,6 +9,8 @@
 #include "IntList.h"
 
 int makeRandomMove(HunterView g);
+int makeLeaderMove (HunterView g);
+int makeFollowerMove (HunterView g, int rank);
 int getRank(HunterView h);
 /*
 Possible stategy:
@@ -22,17 +24,23 @@ Possible stategy:
 	
 */
 
-
+//static int current_leader = 0;
 
 void decideHunterMove(HunterView gameState)
 {
 	srand(time(NULL));
-	// TODO ...
-	// Replace the line below by something better
-	//registerBestPlay("GE","I'm on holiday in Geneva");
+	
+	/*
+	int rank = getRank(gameState);
+	if (rank == 0) {
+		makeLeaderMove(gameState);
+	} else {
+		makeFollowerMove(gameState,rank);
+	}
+	*/
 	
 	int move = makeRandomMove(gameState);
-	//Our Message format: "<hunter's leader value>" //TODO change to convert loc id TODO authenticate with some cahracters
+	//Our Message format: "<hunter's leader value>" // TODO work out message format
 	char *moveTo = idToAbbrev(move);
 	registerBestPlay(moveTo,"No Message Yet");
 }
@@ -46,8 +54,10 @@ int makeRandomMove(HunterView g)
 	return locs[selectRandIndex];
 }
 
+/*
 //Leader AI
 //if no mission yet, and not on rest; move to a place in which no other hunter is on
+//followers will follow ala conga line
 int makeLeaderMove (HunterView g)
 {
 	int move;
@@ -75,15 +85,18 @@ int makeLeaderMove (HunterView g)
 
 //Conga Line AI
 //follow the Leader AI's trail - each minion is assigned a particular index Leader's trail
-int makeFollowerMove (HunterView g)
+int makeFollowerMove (HunterView g, int rank)
 {
-	int move = 1;
-	//int rank = getRank(g); //write this
-	//int trail[TRAIL_SIZE];
-	//#giveMeTheTrail(g,getLeader(),trail);//write this
-	//move = djikstras(trail[rank]);
-	
-	return move;
+	if (isLeaderRested) {
+		return //TODO get current location...
+	} else {
+		int trail[TRAIL_SIZE];
+		giveMeTheTrail(g,current_leader,trail);//write this
+		//int path[70];
+		//djikstras(trail[rank], path);
+		//return path[0];
+		return trail[rank];	//TODO this does not work. Need to work out djikstras to GET to this point...
+	}
 }
 
 int getRank(HunterView h)
@@ -93,17 +106,20 @@ int getRank(HunterView h)
 	getMessages(h,messages);
 	
 	int player = whoAmI(h);
-	
+	int playertmp = player+4;
 	IntList l = newIntList();
 	
 	int tmp;
 	int i;
 	for (i=0;i<5;i++) {
-		if (i!=player && i!=getLeader(h)) {
+		if (i!=player) { //skips drac
 			sscanf(messages[turn-i],"%d",&tmp); //extract the turn number from the message TODO need help with maths
-			IntListInsertInOrder(l,tmp,(5-player+id)%5);
+			IntListInsertInOrder(l,tmp,playertmp%4);
+			playertmp--;
 		}
 	}
+	
+	current_leader = getFirstPlayer(l);
 	
 	return playerPos(l,player);
 }
@@ -118,7 +134,7 @@ int isLeaderRested (g)
 	
 	return 0;
 }
-/*
+
 giveMeTheTrail(HunterView currentView, PlayerID player,
 							LocationID trail[TRAIL_SIZE])
 							
