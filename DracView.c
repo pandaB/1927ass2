@@ -212,7 +212,7 @@ LocationID *whereCanIgo(DracView currentView, int *numLocations, int road, int s
     int i = 0;
     // Case of having a double back or a hide in trail
     while (i < 6) {
-        if (trail[i] > 102 && trail[i] < 108) {
+        if (trail[i] >= 102 && trail[i] < 108) {
             doubleBack = TRUE;
             if (trail[i] == 102) {
                 hide = TRUE;

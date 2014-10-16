@@ -22,8 +22,6 @@ void decideDraculaMove(DracView gameState)
 
 	// Best Play
 	registerBestPlay(moveTo, "SHIGGLES");
-	
-
 
 
 
@@ -46,6 +44,7 @@ void decideDraculaMove(DracView gameState)
 	If below 10 life, move towards castle
 	When to ocen
 	Look for bottlenecks and make traps
+	
 	
 	
 	
